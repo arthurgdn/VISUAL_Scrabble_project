@@ -151,6 +151,7 @@ def find_in_dawg(word, curr_node):
 
 
 if __name__ == "__main__":
+    #Load the lexicon, build the DAWG structure and save it into a pickle file
     big_list = open("data/ods6.txt", "r").readlines()
     big_list = [word.strip("\n") for word in big_list]
     build_trie(big_list)

@@ -5,6 +5,7 @@ import copy
 
 
 class Square:
+    # a square on the board, can have a letter and score modifiers
     # default behavior is blank square, no score modifier, all cross-checks valid
     def __init__(self, letter=None, modifier="Normal", sentinel=1):
         self.letter = letter
@@ -35,6 +36,7 @@ class Square:
 class Board:
     def __init__(self, dawg_root, board):
 
+        #Create the board structure
         row_1 = \
             [Square(modifier="3WS"), Square(), Square(), Square(modifier="2LS"), Square(),
              Square(), Square(), Square(modifier="3WS"), Square(), Square(),
@@ -92,10 +94,11 @@ class Board:
 
         row_16 = [Square(sentinel=0) for _ in range(16)]
 
-        # variables to describe board state
+       
         self.board = [row_1, row_2, row_3, row_4, row_5, row_6, row_7, row_8,
                       row_9, row_10, row_11, row_12, row_13, row_14, row_15, row_16]
         
+         # variables to describe board state
         self.point_dict = {"A": 1, "B": 3, "C": 3, "D": 2,
                            "E": 1, "F": 4, "G": 2, "H": 4,
                            "I": 1, "J": 8, "K": 5, "L": 1,
@@ -135,7 +138,6 @@ class Board:
         self.board = [list(sublist) for sublist in transposed_tuples]
         self.is_transpose = not self.is_transpose
 
-    # TODO: fix scoring errors
     def score_word(self, word, squares, dist_from_anchor):
         score = 0
         score_multiplier = 1
@@ -261,6 +263,7 @@ class Board:
                                 limit - 1, dist_from_anchor + 1)
 
     def update_cross_checks(self):
+        #update the possible letters for each squares
         while self.upper_cross_check:
             curr_square, lower_letter, lower_row, lower_col = self.upper_cross_check.pop()
             curr_square.check_switch(self.is_transpose)
@@ -327,18 +330,7 @@ class Board:
                     return True
             chr_val += 1
         return False
-
-    def print_board(self):
-        print("    ", end="")
-        [print(str(num).zfill(2), end=" ") for num in range(1, 16)]
-        print()
-        for i, row in enumerate(self.board):
-            if i != 15:
-                print(str(i + 1).zfill(2), end="  ")
-            [print(square, end="  ") for square in row]
-            print()
-        print()
-
+    
     # method to insert words into board by row and column number
     # using 1-based indexing for user input
     def insert_word(self, row, col, word):
@@ -488,6 +480,7 @@ class Board:
         return word_rack
 
     def set_board(self, board):
+        #Set the game board squares with the correct letters from a 2-dimensional array board
         for i in range(len(self.board) - 1):
             for j in range(len(self.board[i]) - 1):
                 letter = board[i][j]
@@ -498,51 +491,10 @@ class Board:
         self.update_cross_checks()
 
     def is_empty(self):
+        #Check if board is empty
         is_empty = True
         for i in range(len(self.board) - 1):
             for j in range(len(self.board[i]) - 1):
-                if self.board[i][j] != None and self.board[i][j].letter != None:
+                if self.board[i][j] != None and self.board[i][j].letter != None and self.board[i][j].letter != '_' and self.board[i][j].letter != '':
                     is_empty = False
         return is_empty
-
-# def play_game():
-#     score = 0
-#     tile_bag = ["A"] * 9 + ["B"] * 2 + ["C"] * 2 + ["D"] * 4 + ["E"] * 12 + ["F"] * 2 + ["G"] * 3 + \
-#                ["H"] * 2 + ["I"] * 9 + ["J"] * 1 + ["K"] * 1 + ["L"] * 4 + ["M"] * 2 + ["N"] * 6 + \
-#                ["O"] * 8 + ["P"] * 2 + ["Q"] * 1 + ["R"] * 6 + ["S"] * 4 + ["T"] * 6 + ["U"] * 4 + \
-#                ["V"] * 2 + ["W"] * 2 + ["X"] * 1 + ["Y"] * 2 + ["Z"] * 1 + ["%"] * 2
-
-#     to_load = open("lexicon/scrabble_words_complete.pickle", "rb")
-#     root = pickle.load(to_load)
-#     to_load.close()
-#     word_rack = random.sample(tile_bag, 7)
-#     [tile_bag.remove(letter) for letter in word_rack]
-#     game = Board(root)
-#     word_rack = game.get_start_move(word_rack)
-#     score += game.highest_score
-#     word_rack, new_letters = refill_word_rack(word_rack, tile_bag)
-#     [tile_bag.remove(letter) for letter in new_letters]
-
-#     play = True
-#     while play:
-#         word_rack = game.get_best_move(word_rack)
-#         score += game.highest_score
-#         word_rack, new_letters = refill_word_rack(word_rack, tile_bag)
-#         [tile_bag.remove(letter) for letter in new_letters]
-#         if game.best_word == "":
-#             # draw new hand if can't find any words
-#             if len(tile_bag) >= 7:
-#                 return_to_bag_words = word_rack.copy()
-#                 word_rack, new_letters = refill_word_rack([], tile_bag)
-#                 [tile_bag.remove(letter) for letter in new_letters]
-
-#             else:
-#                 play = False
-#                 for word in all_board_words(game.board):
-#                     if not find_in_dawg(word, root) and word:
-#                         game.print_board()
-#                         raise Exception(f"Invalid word on board: {word}")
-
-#     # game.print_board()
-
-#     return score

@@ -4,17 +4,19 @@ from Solver.dawg import *
 
 class Solver:
     def __init__(self, board, vocab_path="data/vocab_dawg.pickle"):
+        #Load the lexicon with the DAWG structure
         to_load = open(vocab_path, "rb")
         root = pickle.load(to_load)
         to_load.close()
         self.vocab_dawg = root
-
+        #Init a game board
         self.board = Board(self.vocab_dawg, board)
 
     def get_best_word(self, word_rack):
         if self.board.is_empty():
+            #If the board is empty we use a specific function to get the best first word
             return self.get_start_word(word_rack)
-        print(self.board.board[0][0].letter)
+        
         # clear out cross-check lists before adding new words
         self.board.update_cross_checks()
 
@@ -24,6 +26,7 @@ class Solver:
         self.board.best_row = 0
         self.board.best_col = 0
 
+        #Check all possible words in both directions and keep the one with highest score
         transposed = False
         for row in range(0, 15):
             for col in range(0, 15):
@@ -76,8 +79,8 @@ class Solver:
 
         # reset anchor square spot to blank after trying all combinations
         self.board.board[7][8].letter = None
-        self.insert_word(self.board.best_row + 1, self.board.best_col + 1 - self.board.dist_from_anchor, self.board.best_word)
+        self.board.insert_word(self.board.best_row + 1, self.board.best_col + 1 - self.board.dist_from_anchor, self.board.best_word)
         self.board.board[7][8].modifier = ""
-        self.board.word_score_dict[self.board.best_word] = self.highest_score
+        self.board.word_score_dict[self.board.best_word] = self.board.highest_score
 
         return self.board.best_word, self.board.best_row, self.board.best_col
