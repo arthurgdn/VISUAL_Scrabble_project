@@ -15,13 +15,13 @@ Une fois que l'entraînement a fini de tourner votre modèle s'enregistre dans l
 
 ## Obtenir le meilleur mot
 
-Pour être assister au Scrabble, il vous faut ensuite exécuter la commande 
+Pour être assisté au Scrabble, il vous faut ensuite exécuter la commande 
 ```python main.py``` 
 On vous demande alors votre image. Indiquez par exemple "board1.jpeg". 
 
 L'algorithme détecte alors la grille et vous en donne un aperçu. 
 
-On vous demande alors les lettres que vous avez pioché. Entrez vos 7 lettres (par exemple : AEBNERT). 
+On vous demande alors les lettres que vous avez piochées. Entrez vos 7 lettres (par exemple : AEBNERT). 
 
 Le programme vous renvoie alors le mot avec sa position ainsi que la nouvelle grille générée en jouant ce mot. 
 
