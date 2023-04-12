@@ -11,7 +11,7 @@ On lui donne ainsi en entrée les images I et I2.
 Puis on fine-tune le modèle avec la commande suivante
 ```python -m Vision.ViT_finetuning```
 
-Une fois que l'entrainement a fini de tourner votre modèle s'enregistre dans le dossier modèle. 
+Une fois que l'entraînement est fini de tourner votre modèle s'enregistre dans le dossier modèle. 
 
 ## Obtenir le meilleur mot
 
