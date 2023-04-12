@@ -2,12 +2,14 @@ import cv2
 import numpy as np
 
 def extract_cell(i,j,scaled_img):
+    """extracts the cell on the ith row and the jth column of the board"""
     size = scaled_img.shape[0]
     cell_size = size/15
     cell_img = scaled_img[int(i*cell_size):int((i+1)*cell_size), int(j*cell_size):int((j+1)*cell_size)]
     return cell_img
 
 def predict_letter(cell_img, extractor, model):
+    """returns the letter on the cell_img"""
     grey = cv2.cvtColor(cell_img, cv2.COLOR_GRAY2BGR)
     processed_img = extractor(grey,return_tensors="pt")
     logits = model(**processed_img)
@@ -16,7 +18,12 @@ def predict_letter(cell_img, extractor, model):
         return ''
     return model.config.id2label[predicted_label]
 
+# letters in Scrabble have a score in index 
+# This score affect the letter prediction
+# Thus we clean letters by deleting the score
+
 def color_cluster(mat, i, j, c):
+    """returns a matrix with pixels belonging to a cluster"""
     n_rows,n_cols = mat.shape
     
     mat[i,j] = c
@@ -28,6 +35,9 @@ def color_cluster(mat, i, j, c):
     return mat
     
 def get_clusters(grey):
+    """detects the different clusters 
+    (generally, the letter is one cluster (the biggest) and 
+    the digit is the second cluster)"""
     res = grey.copy()
     c = 1
     n_rows,n_cols = grey.shape
@@ -48,6 +58,7 @@ def get_clusters(grey):
     return res, dic, big_clust
         
 def process_cell_cluster(cell_img): 
+    """returns only the image with the biggest cluster (other clusters are set to 255)"""
     threshold = 20
     
     is_letter = False

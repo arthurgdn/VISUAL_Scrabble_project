@@ -5,12 +5,15 @@ from Vision.letter_detection import process_cell_cluster
 from Vision.letter_detection import predict_letter
 
 def threshold_grid(scaled_img):
+    """preprocess the grid before cell detection"""
     filter_img = cv2.cvtColor(scaled_img, cv2.COLOR_BGR2HSV)
     th_img = cv2.adaptiveThreshold(filter_img[:, :, 2],255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
             cv2.THRESH_BINARY,151,90)
     return th_img
 
 def proceed_grid(th_img, extractor, model): 
+    """predicts the letter for each cell of the grid
+    (or '' if the cell is empty)"""
     res = []
     for i in tqdm(range(15)):       
         row = []
