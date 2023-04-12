@@ -8,6 +8,8 @@ def compute_metrics(p, metric):
     return metric.compute(predictions=np.argmax(p.predictions, axis=1), references=p.label_ids)
 
 def create_dataset(list_img, label = 8):
+    """creates a dataset from the list of image (list_img). 
+    This dataser will help fine tuning the model"""
     out = {'image':[], 'labels':[]}
     for image in list_img:
         out['image'].append(image)

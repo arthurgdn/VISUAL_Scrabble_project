@@ -12,7 +12,9 @@ from Solver.dawg import *
 ### All process ###
 
 # load image
-filename = 'data/board1.jpeg'
+folder = 'data/'
+filename = input("Quelle est votre image ?")
+filename = folder + filename
 img = cv2.imread(filename,1)
 
 # obtain contours
