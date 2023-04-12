@@ -4,7 +4,7 @@
 Ce projet de Vision par Ordinateur consiste en la mise en place d'un assistant au Scrabble. En donnant en entrée, une grille de Scrabble et le tirage de lettre effectué, on renvoie le mot qui donne le score le plus important.
 
 ## Fine-tuning du modèle
-Pour détecter correctemment les lettres sur le Scrabble nous avons besoin de fine-tuner le modèle. En effet, celui-ci a du mal à distinguer les "I". 
+Pour détecter correctement les lettres sur le Scrabble nous avons besoin de fine-tuner le modèle. En effet, celui-ci a du mal à distinguer les "I". 
 
 On lui donne ainsi en entrée les images I et I2. 
 
