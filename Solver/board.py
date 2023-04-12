@@ -128,16 +128,19 @@ class Board:
         self.upper_cross_check = []
         self.lower_cross_check = []
 
+        # store if word has been inserted
+        self.modified = False
+
         # set the letters on the board
         self.set_board(board)
 
     # transpose method that modifies self.board inplace
     def transpose(self):
-        # https://datagy.io/python-transpose-list-of-lists/
         transposed_tuples = copy.deepcopy(list(zip(*self.board)))
         self.board = [list(sublist) for sublist in transposed_tuples]
         self.is_transpose = not self.is_transpose
 
+    #Calculate the score of a word given its position on the board
     def score_word(self, word, squares, dist_from_anchor):
         score = 0
         score_multiplier = 1
@@ -191,6 +194,7 @@ class Board:
             self.dist_from_anchor = dist_from_anchor
             self.letters_from_rack = rack_tiles
 
+    #Check all suffixes which can be made from a starting node
     def extend_right(self, start_node, square_row, square_col, rack, word, squares, dist_from_anchor):
         square = self.board[square_row][square_col]
         square.check_switch(self.is_transpose)
@@ -230,7 +234,7 @@ class Board:
                 new_squares = squares + [square]
                 self.extend_right(new_node, square_row, square_col + 1, rack, new_word, new_squares,
                                    dist_from_anchor)
-
+    #Check all prefixes which can be made from a starting node
     def left_part(self, start_node, anchor_square_row, anchor_square_col, rack, word, squares, limit,
                    dist_from_anchor):
         potential_square = self.board[anchor_square_row][anchor_square_col - dist_from_anchor]
@@ -367,6 +371,7 @@ class Board:
                     return
             else:
                 self.board[row][curr_col].letter = letter
+                self.modified = True
 
                 # reset any modifiers to 0 once they have a tile placed on top of them
                 self.board[row][curr_col].modifier = ""
@@ -422,63 +427,6 @@ class Board:
         # reset anchor square spot to blank after trying all combinations
         self.board[square_row][square_col - 1].letter = None
 
-    # scan all tiles on board in both transposed and non-transposed state, find best move
-    def get_best_move(self, word_rack):
-
-        self.word_rack = word_rack
-
-        # clear out cross-check lists before adding new words
-        self.update_cross_checks()
-
-        # reset word variables to clear out words from previous turns
-        self.best_word = ""
-        self.highest_score = 0
-        self.best_row = 0
-        self.best_col = 0
-
-        transposed = False
-        for row in range(0, 15):
-            for col in range(0, 15):
-                curr_square = self.board[row][col]
-                if curr_square.letter and (not self.board[row][col - 1].letter):
-                    prev_best_score = self.highest_score
-                    self.get_all_words(row + 1, col + 1, word_rack)
-                    if self.highest_score > prev_best_score:
-                        self.best_row = row
-                        self.best_col = col
-
-        self.transpose()
-        for row in range(0, 15):
-            for col in range(0, 15):
-                curr_square = self.board[row][col]
-                if curr_square.letter and (not self.board[row][col - 1].letter):
-                    prev_best_score = self.highest_score
-                    self.get_all_words(row + 1, col + 1, word_rack)
-                    if self.highest_score > prev_best_score:
-                        transposed = True
-                        self.best_row = row
-                        self.best_col = col
-
-        # Don't try to insert word if we couldn't find one
-        if not self.best_word:
-            self.transpose()
-            return word_rack
-
-        if transposed:
-            self.insert_word(self.best_row + 1, self.best_col + 1 - self.dist_from_anchor, self.best_word)
-            self.transpose()
-        else:
-            self.transpose()
-            self.insert_word(self.best_row + 1, self.best_col + 1 - self.dist_from_anchor, self.best_word)
-
-        self.word_score_dict[self.best_word] = self.highest_score
-
-        for letter in self.letters_from_rack:
-            if letter in word_rack:
-                word_rack.remove(letter)
-
-        return word_rack
-    
     def print_board(self):
         print("    ", end="")
         [print(str(num).zfill(2), end=" ") for num in range(1, 16)]

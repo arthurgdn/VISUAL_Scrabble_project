@@ -1,6 +1,6 @@
 import pickle
 
-
+# Build the trie structure from a list of words (lexicon)
 def build_trie(lexicon):
     num_nodes = 1
     trie = {0: {}}
