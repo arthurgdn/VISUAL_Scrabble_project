@@ -478,6 +478,17 @@ class Board:
                 word_rack.remove(letter)
 
         return word_rack
+    
+    def print_board(self):
+        print("    ", end="")
+        [print(str(num).zfill(2), end=" ") for num in range(1, 16)]
+        print()
+        for i, row in enumerate(self.board):
+            if i != 15:
+                print(str(i + 1).zfill(2), end="  ")
+            [print(square, end="  ") for square in row]
+            print()
+        print()
 
     def set_board(self, board):
         #Set the game board squares with the correct letters from a 2-dimensional array board

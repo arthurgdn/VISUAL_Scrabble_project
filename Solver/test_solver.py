@@ -2,7 +2,7 @@ from Solver.solver import Solver
 from Solver.dawg import *
 
 def test_solver():
-    word_rack = ["A","C","P","E","T","Q","S"]
+    word_rack = ["Z","L","R","A","A","V","S"]
     board = [['E', '', '', '', '', '', '', 'F', '', '', '', '', '', '', ''],
  ['', '', '', '', '', '', 'V', 'A', 'T', '', '', '', '', '', ''],
  ['', '', '', '', '', '', '', 'N', 'O', '', '', '', '', '', '_'],

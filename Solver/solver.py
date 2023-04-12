@@ -63,8 +63,8 @@ class Solver:
             self.board.insert_word(self.board.best_row + 1, self.board.best_col + 1 - self.board.dist_from_anchor, self.board.best_word)
 
         self.board.word_score_dict[self.board.best_word] = self.board.highest_score
-        
-        return self.board.best_word, self.board.best_row, self.board.best_col
+        print(self.board.print_board())
+        return self.board.best_word, self.board.best_row + 1, self.board.best_col + 1
     
     def get_start_word(self, word_rack):
             # board symmetrical at start so just always play the start move horizontally
@@ -82,5 +82,5 @@ class Solver:
         self.board.insert_word(self.board.best_row + 1, self.board.best_col + 1 - self.board.dist_from_anchor, self.board.best_word)
         self.board.board[7][8].modifier = ""
         self.board.word_score_dict[self.board.best_word] = self.board.highest_score
-
-        return self.board.best_word, self.board.best_row, self.board.best_col
+        print(self.board.print_board())
+        return self.board.best_word, self.board.best_row + 1, self.board.best_col + 1
